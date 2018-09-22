@@ -1,0 +1,35 @@
+const puppeteer = require('puppeteer');
+
+async function run({ month = 3, day = 6, year = 2018 } = {}) {
+  const url = `https://www.hockey-reference.com/boxscores/index.fcgi?month=${month}&day=${day}&year=${year}`;
+  const browser = await puppeteer.launch();
+  const page = await browser.newPage();
+  try {
+    await page.goto(url, { waitUntil: 'domcontentloaded' });
+  } catch (err) {
+    await browser.close();
+    throw err;
+  }
+
+  const data = await page.evaluate(() => {
+    const games = Array.from(document.querySelectorAll('.game_summary'));
+    const HOME_TEAM = '.teams tbody tr:nth-of-type(1) td:nth-of-type(1) a';
+    const HOME_SCORE = '.teams tbody tr:nth-of-type(1) td:nth-of-type(2)';
+    const AWAY_TEAM = '.teams tbody tr:nth-of-type(2) td:nth-of-type(1) a';
+    const AWAY_SCORE = '.teams tbody tr:nth-of-type(2) td:nth-of-type(2)';
+    return games.map((game) => ({
+      homeTeam: game.querySelector(HOME_TEAM).innerText,
+      homeScore: game.querySelector(HOME_SCORE).innerText,
+      awayTeam: game.querySelector(AWAY_TEAM).innerText,
+      awayScore: game.querySelector(AWAY_SCORE).innerText,
+    }));
+  });
+
+  console.log(data);
+
+  await browser.close();
+}
+
+run()
+  .then(() => console.warn('success'))
+  .catch((err) => console.warn('Error:', err));
