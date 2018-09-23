@@ -1,7 +1,9 @@
 const puppeteer = require('puppeteer');
+const yesterday = require('./get-date.js');
 
 async function run({ month = 3, day = 6, year = 2018 } = {}) {
   const url = `https://www.hockey-reference.com/boxscores/index.fcgi?month=${month}&day=${day}&year=${year}`;
+  console.log('target url', url);
   const browser = await puppeteer.launch();
   const page = await browser.newPage();
   try {
