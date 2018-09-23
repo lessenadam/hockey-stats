@@ -1,5 +1,5 @@
 const puppeteer = require('puppeteer');
-const yesterday = require('./get-date.js');
+const { yesterdayFormatted } = require('./get-date.js');
 
 async function run({ month = 3, day = 6, year = 2018 } = {}) {
   const url = `https://www.hockey-reference.com/boxscores/index.fcgi?month=${month}&day=${day}&year=${year}`;
@@ -16,7 +16,6 @@ async function run({ month = 3, day = 6, year = 2018 } = {}) {
   //
   // if the url redirects, it means there weren't any games for that day
   //
-  console.log(page.url());
   if (page.url() === url) {
     const data = await page.evaluate(() => {
       const games = Array.from(document.querySelectorAll('.game_summary'));
@@ -31,7 +30,11 @@ async function run({ month = 3, day = 6, year = 2018 } = {}) {
         awayScore: game.querySelector(AWAY_SCORE).innerText.trim(),
       }));
     });
-    console.log(data);
+    const results = {
+      scores: data,
+      date: yesterdayFormatted,
+    };
+    console.log(results);
   } else {
     console.log('no games for date', { month, day, year });
   }
