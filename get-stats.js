@@ -1,7 +1,6 @@
 const puppeteer = require('puppeteer');
-const { yesterdayFormatted } = require('./get-date.js');
 
-async function run({ month = 3, day = 6, year = 2018 } = {}) {
+async function run({ month = 3, day = 6, year = 2018 } = {}, dayFormatted = 'Mon 3 6 2018') {
   const url = `https://www.hockey-reference.com/boxscores/index.fcgi?month=${month}&day=${day}&year=${year}`;
   console.log('target url', url);
   const browser = await puppeteer.launch();
@@ -16,6 +15,7 @@ async function run({ month = 3, day = 6, year = 2018 } = {}) {
   //
   // if the url redirects, it means there weren't any games for that day
   //
+  let results;
   if (page.url() === url) {
     const data = await page.evaluate(() => {
       const games = Array.from(document.querySelectorAll('.game_summary'));
@@ -30,18 +30,23 @@ async function run({ month = 3, day = 6, year = 2018 } = {}) {
         awayScore: game.querySelector(AWAY_SCORE).innerText.trim(),
       }));
     });
-    const results = {
+    results = {
       scores: data,
-      date: yesterdayFormatted,
+      date: dayFormatted,
     };
-    console.log(results);
   } else {
     console.log('no games for date', { month, day, year });
   }
 
   await browser.close();
+  return results;
 }
 
-run()
-  .then(() => console.warn('success'))
-  .catch((err) => console.warn('Error:', err));
+function getStats(day, dayFormatted) {
+  return run(day, dayFormatted)
+    .catch((err) => console.warn('Error:', err));
+}
+
+module.exports = {
+  getStats,
+}

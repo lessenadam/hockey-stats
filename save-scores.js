@@ -3,71 +3,13 @@ const converter = require('json-2-csv');
 const fs = require('fs');
 const csvToJson = require('convert-csv-to-json');
 
-const { scores, date } = {
-  scores: [
-    {
-      homeTeam: 'Washington Capitals',
-      homeScore: '0',
-      awayTeam: 'Anaheim Ducks',
-      awayScore: '3',
-    },
-    {
-      homeTeam: 'Detroit Red Wings',
-      homeScore: '1',
-      awayTeam: 'Boston Bruins',
-      awayScore: '10',
-    },
-    {
-      homeTeam: 'Vegas Golden Knights',
-      homeScore: '3',
-      awayTeam: 'Columbus Blue Jackets',
-      awayScore: '2',
-    },
-    {
-      homeTeam: 'Colorado Avalanche',
-      homeScore: '5',
-      awayTeam: 'Chicago Blackhawks',
-      awayScore: '6',
-    },
-    {
-      homeTeam: 'Carolina Hurricanes',
-      homeScore: '7',
-      awayTeam: 'Minnesota Wild',
-      awayScore: '1',
-    },
-    {
-      homeTeam: 'Montreal Canadiens',
-      homeScore: '0',
-      awayTeam: 'New Jersey Devils',
-      awayScore: '1',
-    },
-    {
-      homeTeam: 'Dallas Stars',
-      homeScore: '0',
-      awayTeam: 'Nashville Predators',
-      awayScore: '5',
-    },
-    {
-      homeTeam: 'Winnipeg Jets',
-      homeScore: '0',
-      awayTeam: 'New York Rangers',
-      awayScore: '1',
-    },
-    {
-      homeTeam: 'Florida Panthers',
-      homeScore: '2',
-      awayTeam: 'Tampa Bay Lightning',
-      awayScore: '2',
-    },
-  ],
-  date: 'Sat Sep 22 2018',
-};
-
 function round(value, decimals) {
-  return Number(Math.round(value+'e'+decimals)+'e-'+decimals);
+  return Number(`${Math.round(`${value}e${decimals}`)}e-${decimals}`);
 }
 
-function splitGameScore({ homeTeam, homeScore, awayTeam, awayScore }) {
+function splitGameScore({
+  homeTeam, homeScore, awayTeam, awayScore,
+} = {}, date) {
   // split home team and away team
   const homeResult = {
     team: homeTeam,
@@ -94,8 +36,6 @@ function splitGameScore({ homeTeam, homeScore, awayTeam, awayScore }) {
   return [homeResult, awayResult];
 }
 
-const splitScores = _.flatten(scores.map(splitGameScore));
-
 function getJson2CsvCallback(filePath) {
   return function json2csvCallback(err, csv) {
     if (err) {
@@ -106,7 +46,7 @@ function getJson2CsvCallback(filePath) {
       if (fileError) {
         console.log(
           'Some error occured - file either not saved or corrupted file saved.',
-          fileError
+          fileError,
         );
       } else {
         console.log("It's saved!");
@@ -114,33 +54,6 @@ function getJson2CsvCallback(filePath) {
     });
   };
 }
-
-const mockGames = [
-  {
-      VS: 'foo',
-      GFA: 3,
-      GAA: 1,
-      GFH: '',
-      GAH: '',
-      Date: 'bar',
-    },
-    {
-      VS: 'foo',
-      GFA: 7,
-      GAA: 2,
-      GFH: '',
-      GAH: '',
-      Date: date,
-    },
-    {
-      VS: 'foo',
-      GFA: 1,
-      GAA: 2,
-      GFH: '',
-      GAH: '',
-      Date: date,
-    },
-]
 
 function getAvgRow(games) {
   const totals = games.reduce(
@@ -163,7 +76,7 @@ function getAvgRow(games) {
       GAH: 0,
       homeGames: 0,
       awayGames: 0,
-    }
+    },
   );
 
   return {
@@ -199,4 +112,12 @@ function generateCsvForGame(game) {
   converter.json2csv(games, json2csvCallback);
 }
 
-splitScores.forEach(generateCsvForGame);
+
+function saveScores({ scores, date } = {}) {
+  const splitScores = _.flatten(scores.map((score) => splitGameScore(score, date)));
+  splitScores.forEach(generateCsvForGame);
+}
+
+module.exports = {
+  saveScores,
+};
