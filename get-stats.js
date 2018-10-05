@@ -15,9 +15,9 @@ async function run({ month = 3, day = 6, year = 2018 } = {}, dayFormatted = 'Mon
   //
   // if the url redirects, it means there weren't any games for that day
   //
-  let results;
+  let data = [];
   if (page.url() === url) {
-    const data = await page.evaluate(() => {
+    data = await page.evaluate(() => {
       const games = Array.from(document.querySelectorAll('.game_summary'));
       const HOME_TEAM = '.teams tbody tr:nth-of-type(1) td:nth-of-type(1) a';
       const HOME_SCORE = '.teams tbody tr:nth-of-type(1) td:nth-of-type(2)';
@@ -30,13 +30,13 @@ async function run({ month = 3, day = 6, year = 2018 } = {}, dayFormatted = 'Mon
         awayScore: game.querySelector(AWAY_SCORE).innerText.trim(),
       }));
     });
-    results = {
-      scores: data,
-      date: dayFormatted,
-    };
   } else {
     console.log('no games for date', { month, day, year });
   }
+  const results = {
+    scores: data,
+    date: dayFormatted,
+  };
 
   await browser.close();
   return results;

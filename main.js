@@ -1,7 +1,7 @@
 const moment = require('moment');
 const { getStats } = require('./get-stats');
 const { saveScores } = require('./mongo-save-scores');
-const { getDayInfo } = require('./get-date');
+const { getDayInfo, yesterday } = require('./get-date');
 
 function getDates(startDate, stopDate) {
   const dateArray = [];
@@ -26,21 +26,29 @@ const getScoresAndSave = ({ targetDay, targetFormattedDay } = {}) => {
       console.log('There was some uncaught error', err);
     });
 };
-// the database might be able to handle concurrency...
-// need a from and a to... and then loop over all the dates
-// call moment('some date string')
-// call getScoresAndSave on getDayInfo(result)
-const momentDates = getDates(new Date('Apr 09, 2018'), new Date('Apr 09, 2018'));
-const tasks = momentDates.map((momentDate) => () => getScoresAndSave(getDayInfo(momentDate)));
 
-/* eslint-disable */
-tasks.reduce((promiseChain, currentTask) => {
-    return promiseChain.then((chainResults) =>
-        currentTask().then((currentResult) =>
-            [ ...chainResults, currentResult ]
-        )
-    );
-}, Promise.resolve([])).then(arrayOfResults => {
-    // Do something with all results
-    console.log(arrayOfResults);
-});
+
+const getScoresForDay = (day) => {
+  const momentDate = moment(day);
+  return getScoresAndSave(getDayInfo(momentDate));
+}
+
+const getScoresForDayRange = (dayFrom, dayTo) => {
+  
+  const momentDates = getDates(new Date(dayFrom), new Date(dayTo));
+  const tasks = momentDates.map((momentDate) => () => getScoresAndSave(getDayInfo(momentDate)));
+
+  /* eslint-disable */
+  return tasks.reduce((promiseChain, currentTask) => {
+      return promiseChain.then((chainResults) =>
+          currentTask().then((currentResult) =>
+              [ ...chainResults, currentResult ]
+          )
+      );
+  }, Promise.resolve([])).then(arrayOfResults => {
+      // Do something with all results
+      console.log(arrayOfResults);
+  });  
+}
+
+getScoresForDayRange('Jan 10, 2018', 'Jan 12, 2018');
