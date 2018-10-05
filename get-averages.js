@@ -59,10 +59,81 @@ const getTeamAvgs = (teamName) => MongoClient.connect(url)
       .finally(() => db.close());
   });
 
+const getHomeLastN = (teamName, numberOfGames) => MongoClient.connect(url)
+  .then((db) => {
+    const collection = db.collection('scores');
+
+    return collection.aggregate([
+      {
+        $match: {
+          team: teamName,
+          gfh: { $exists: true },
+        },
+      },
+      {
+        $sort: { date: -1 },
+      },
+      {
+        $limit: numberOfGames,
+      },
+      {
+        $group: {
+          _id: null,
+          recentAvgGfh: { $avg: '$gfh' },
+          recentAvgGah: { $avg: '$gah' },
+        },
+      },
+    ])
+      .toArray()
+      .then((results) => {
+        console.log(results);
+        return results[0];
+      })
+      .catch((err) => console.log('no', err))
+      .finally(() => db.close());
+  });
+
+const getAwayLastN = (teamName, numberOfGames) => MongoClient.connect(url)
+  .then((db) => {
+    const collection = db.collection('scores');
+
+    return collection.aggregate([
+      {
+        $match: {
+          team: teamName,
+          gfa: { $exists: true },
+        },
+      },
+      {
+        $sort: { date: -1 },
+      },
+      {
+        $limit: numberOfGames,
+      },
+      {
+        $group: {
+          _id: null,
+          recentAvgGfa: { $avg: '$gfa' },
+          recentAvgGaa: { $avg: '$gaa' },
+        },
+      },
+    ])
+      .toArray()
+      .then((results) => {
+        console.log(results);
+        return results[0];
+      })
+      .catch((err) => console.log('no', err))
+      .finally(() => db.close());
+  });
+
 module.exports = {
   getLeagueAvgs,
   getTeamAvgs,
+  getHomeLastN,
+  getAwayLastN,
 };
 
-// getLeagueAvgs().then((res) => console.log('res is', res));
-getTeamAvgs('San Jose Sharks');
+// getLeagueAvgs();
+// getTeamAvgs('San Jose Sharks');
+getAwayLastN('San Jose Sharks', 5);

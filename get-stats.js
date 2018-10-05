@@ -49,4 +49,4 @@ function getStats(day, dayFormatted) {
 
 module.exports = {
   getStats,
-}
+};
