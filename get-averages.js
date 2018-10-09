@@ -59,7 +59,7 @@ const getTeamAvgs = (teamName) => MongoClient.connect(url)
       .finally(() => db.close());
   });
 
-const getHomeLastN = (teamName, numberOfGames) => MongoClient.connect(url)
+const getLastN = (teamName, numberOfGames) => MongoClient.connect(url)
   .then((db) => {
     const collection = db.collection('scores');
 
@@ -67,7 +67,6 @@ const getHomeLastN = (teamName, numberOfGames) => MongoClient.connect(url)
       {
         $match: {
           team: teamName,
-          gfh: { $exists: true },
         },
       },
       {
@@ -79,49 +78,19 @@ const getHomeLastN = (teamName, numberOfGames) => MongoClient.connect(url)
       {
         $group: {
           _id: null,
-          recentAvgGfh: { $avg: '$gfh' },
-          recentAvgGah: { $avg: '$gah' },
+          gfa: { $sum: '$gfa' },
+          gaa: { $sum: '$gaa' },
+          gfh: { $sum: '$gfh' },
+          gah: { $sum: '$gah' },
         },
       },
     ])
       .toArray()
       .then((results) => {
-        console.log(results);
-        return results[0];
-      })
-      .catch((err) => console.log('no', err))
-      .finally(() => db.close());
-  });
-
-const getAwayLastN = (teamName, numberOfGames) => MongoClient.connect(url)
-  .then((db) => {
-    const collection = db.collection('scores');
-
-    return collection.aggregate([
-      {
-        $match: {
-          team: teamName,
-          gfa: { $exists: true },
-        },
-      },
-      {
-        $sort: { date: -1 },
-      },
-      {
-        $limit: numberOfGames,
-      },
-      {
-        $group: {
-          _id: null,
-          recentAvgGfa: { $avg: '$gfa' },
-          recentAvgGaa: { $avg: '$gaa' },
-        },
-      },
-    ])
-      .toArray()
-      .then((results) => {
-        console.log(results);
-        return results[0];
+        const [ recent ] = results;
+        const avgGf = (recent.gfa + recent.gfh) / numberOfGames;
+        const avgGa = (recent.gaa + recent.gah) / numberOfGames;
+        return { avgGf, avgGa };
       })
       .catch((err) => console.log('no', err))
       .finally(() => db.close());
@@ -130,10 +99,9 @@ const getAwayLastN = (teamName, numberOfGames) => MongoClient.connect(url)
 module.exports = {
   getLeagueAvgs,
   getTeamAvgs,
-  getHomeLastN,
-  getAwayLastN,
+  getLastN,
 };
 
 // getLeagueAvgs();
 // getTeamAvgs('San Jose Sharks');
-getAwayLastN('San Jose Sharks', 5);
+// getLastN('San Jose Sharks', 5).then((res) => console.warn(res));
