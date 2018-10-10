@@ -23,10 +23,9 @@ const getLeagueAvgs = () => MongoClient.connect(url)
     ])
       .toArray()
       .then((results) => {
-        console.log(results[0]);
         return results[0];
       })
-      .catch((err) => console.log('no', err))
+      .catch((err) => console.log('err', err))
       .finally(() => db.close());
   });
 
@@ -52,10 +51,9 @@ const getTeamAvgs = (teamName) => MongoClient.connect(url)
     ])
       .toArray()
       .then((results) => {
-        console.log(results[0]);
         return results[0];
       })
-      .catch((err) => console.log('no', err))
+      .catch((err) => console.log('err', err))
       .finally(() => db.close());
   });
 

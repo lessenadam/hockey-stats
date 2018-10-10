@@ -2,6 +2,8 @@ const moment = require('moment');
 const { getStats } = require('./get-stats');
 const { saveScores } = require('./mongo-save-scores');
 const { getDayInfo, yesterday } = require('./get-date');
+const { serializePromises } = require('./utils');
+
 
 function getDates(startDate, stopDate) {
   const dateArray = [];
@@ -39,16 +41,11 @@ const getScoresForDayRange = (dayFrom, dayTo) => {
   const tasks = momentDates.map((momentDate) => () => getScoresAndSave(getDayInfo(momentDate)));
 
   /* eslint-disable */
-  return tasks.reduce((promiseChain, currentTask) => {
-      return promiseChain.then((chainResults) =>
-          currentTask().then((currentResult) =>
-              [ ...chainResults, currentResult ]
-          )
-      );
-  }, Promise.resolve([])).then(arrayOfResults => {
-      // Do something with all results
-      console.log(arrayOfResults);
-  });  
+  return serializePromises(tasks)
+    .then(arrayOfResults => {
+        // Do something with all results
+        console.log(arrayOfResults);
+    });  
 }
 
-getScoresForDayRange('Jan 10, 2018', 'Jan 12, 2018');
+getScoresForDayRange('Oct 3, 2018', 'Oct 8, 2018');
