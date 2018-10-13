@@ -48,4 +48,7 @@ const getScoresForDayRange = (dayFrom, dayTo) => {
     });
 }
 
-getScoresForDayRange('Oct 3, 2018', 'Oct 8, 2018');
+const seasonStart = 'Oct 3, 2018'
+const today = moment().format('MMM DD, YYYY');
+
+getScoresForDayRange(seasonStart, today);
