@@ -1,7 +1,5 @@
 const { MongoClient } = require('mongodb');
-const _ = require('lodash');
 const assert = require('assert');
-const fs = require('fs');
 const csvToJson = require('convert-csv-to-json');
 
 // Connection URL
@@ -20,9 +18,10 @@ const insertDocuments = function insertDoc(docs, db, callback) {
 
 function saveSchedule() {
   // read in the csv
-  // convert it to the documents we want to save to the db: date, homeTeam, awayTeam (Date, Visitor, Home)
-  const filePath = './2018-2019-schedule.csv';
-  const games = csvToJson.fieldDelimiter(',').getJsonFromCsv(filePath).map((game) => ({ 
+  // convert it to the documents we want to save to the db
+  // date, homeTeam, awayTeam (Date, Visitor, Home)
+  const filePath = '../data/2018-2019-schedule.csv';
+  const games = csvToJson.fieldDelimiter(',').getJsonFromCsv(filePath).map((game) => ({
     date: new Date(game.Date),
     homeTeam: game.Visitor,
     awayTeam: game.Home,
@@ -32,7 +31,7 @@ function saveSchedule() {
   MongoClient.connect(url, (err, db) => {
     assert.equal(null, err);
     console.log('Connected successfully to server');
-  
+
     insertDocuments(games, db, () => {
       db.close();
     });
