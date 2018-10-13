@@ -1,4 +1,5 @@
 /node_modules
 /.vscode
 /team-results
+/private
 get-game-projections.js
