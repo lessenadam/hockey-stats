@@ -20,9 +20,14 @@ const getLeagueAvgs = () => MongoClient.connect(url)
       },
     ])
       .toArray()
-      .then((results) => results[0])
-      .catch((err) => console.log('err', err))
-      .finally(() => db.close());
+      .then((results) => {
+        db.close();
+        return results[0];
+      })
+      .catch((err) => {
+        db.close();
+        console.log('err', err);
+      });
   });
 
 const getTeamAvgs = (teamName) => MongoClient.connect(url)
@@ -46,9 +51,14 @@ const getTeamAvgs = (teamName) => MongoClient.connect(url)
       },
     ])
       .toArray()
-      .then((results) => results[0])
-      .catch((err) => console.log('err', err))
-      .finally(() => db.close());
+      .then((results) => {
+        db.close();
+        return results[0];
+      })
+      .catch((err) => {
+        db.close();
+        console.log('err', err);
+      });
   });
 
 const getLastN = (teamName, numberOfGames) => MongoClient.connect(url)
@@ -82,10 +92,13 @@ const getLastN = (teamName, numberOfGames) => MongoClient.connect(url)
         const [recent] = results;
         const avgGf = (recent.gfa + recent.gfh) / numberOfGames;
         const avgGa = (recent.gaa + recent.gah) / numberOfGames;
+        db.close();
         return { avgGf, avgGa };
       })
-      .catch((err) => console.log('no', err))
-      .finally(() => db.close());
+      .catch((err) => {
+        db.close();
+        console.log('err', err);
+      });
   });
 
 module.exports = {
