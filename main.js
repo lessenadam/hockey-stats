@@ -1,7 +1,7 @@
 const moment = require('moment');
 const { getStats } = require('./src/get-stats');
 const { saveScores } = require('./src/mongo-save-scores');
-const { getDayInfo, yesterday } = require('./src/get-date');
+const { getDayInfo, getYesterday } = require('./src/get-date');
 const { serializePromises } = require('./utils/utils');
 
 
@@ -47,7 +47,10 @@ const getScoresForDayRange = (dayFrom, dayTo) => {
     });
 }
 
-const seasonStart = 'Oct 3, 2018'
-const today = moment().format('MMM DD, YYYY');
+// const seasonStart = 'Oct 3, 2018'
+// const today = moment().format('MMM DD, YYYY');
 
-getScoresForDayRange(seasonStart, today);
+// getScoresForDayRange(seasonStart, today);
+getScoresForDay(getYesterday())
+const msPerDay = 1000 * 60 * 60 * 24;
+setInterval(() => getScoresForDay(getYesterday()), msPerDay);

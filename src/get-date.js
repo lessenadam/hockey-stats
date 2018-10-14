@@ -1,9 +1,9 @@
 const moment = require('moment');
 
-const yesterday = moment().add(-1, 'days');
-
 module.exports = {
-  yesterday,
+  getYesterday() {
+    return moment().add(-1, 'days');
+  },
 
   getDayInfo(momentDay) {
     return {
