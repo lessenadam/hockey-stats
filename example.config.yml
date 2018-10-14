@@ -1,0 +1,7 @@
+mongodb:
+  host:       localhost
+  port:       27017
+  # If the db uses auth
+  # username:   user
+  # pwd:        abc123
+  # authDb:     admin

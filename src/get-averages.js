@@ -1,7 +1,5 @@
 const { MongoClient } = require('mongodb');
-
-// need a function for league avgs
-const url = 'mongodb://localhost:27017/hockey-stats';
+const { url } = require('./db-connection');
 
 const getLeagueAvgs = () => MongoClient.connect(url)
   .then((db) => {
@@ -22,9 +20,7 @@ const getLeagueAvgs = () => MongoClient.connect(url)
       },
     ])
       .toArray()
-      .then((results) => {
-        return results[0];
-      })
+      .then((results) => results[0])
       .catch((err) => console.log('err', err))
       .finally(() => db.close());
   });
@@ -50,9 +46,7 @@ const getTeamAvgs = (teamName) => MongoClient.connect(url)
       },
     ])
       .toArray()
-      .then((results) => {
-        return results[0];
-      })
+      .then((results) => results[0])
       .catch((err) => console.log('err', err))
       .finally(() => db.close());
   });
@@ -85,7 +79,7 @@ const getLastN = (teamName, numberOfGames) => MongoClient.connect(url)
     ])
       .toArray()
       .then((results) => {
-        const [ recent ] = results;
+        const [recent] = results;
         const avgGf = (recent.gfa + recent.gfh) / numberOfGames;
         const avgGa = (recent.gaa + recent.gah) / numberOfGames;
         return { avgGf, avgGa };

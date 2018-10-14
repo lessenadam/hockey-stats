@@ -1,9 +1,7 @@
 const { MongoClient } = require('mongodb');
 const assert = require('assert');
 const csvToJson = require('convert-csv-to-json');
-
-// Connection URL
-const url = 'mongodb://localhost:27017/hockey-stats';
+const { url } = require('./db-connection');
 
 const insertDocuments = function insertDoc(docs, db, callback) {
   // Get the documents collection

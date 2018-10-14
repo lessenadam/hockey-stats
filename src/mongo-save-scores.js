@@ -1,6 +1,6 @@
 const { MongoClient } = require('mongodb');
 const _ = require('lodash');
-const assert = require('assert');
+const { url } = require('./db-connection');
 
 function splitGameScore({
   homeTeam, homeScore, awayTeam, awayScore,
@@ -22,9 +22,6 @@ function splitGameScore({
   };
   return [homeResult, awayResult];
 }
-
-// Connection URL
-const url = 'mongodb://localhost:27017/hockey-stats';
 
 const insertDocuments = function insertDoc(docs, db) {
   // Get the documents collection
