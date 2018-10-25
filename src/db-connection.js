@@ -1,7 +1,10 @@
 const yaml = require('js-yaml');
 const fs = require('fs');
+const path = require('path');
 
-const { mongodb } = yaml.safeLoad(fs.readFileSync('config.yml', 'utf8'));
+const configPath = path.join(__dirname, '../config.yml');
+
+const { mongodb } = yaml.safeLoad(fs.readFileSync(configPath, 'utf8'));
 const {
   host, port, username, pwd, authDb,
 } = mongodb;

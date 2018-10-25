@@ -2,6 +2,8 @@
 /.vscode
 /team-results
 /private
+/hockey-stats-fe
+
 get-game-projections.js
 config.yml
 nohup.out
