@@ -50,8 +50,8 @@ const getScoresForDayRange = (dayFrom, dayTo) => {
 const seasonStart = 'Oct 3, 2018'
 const today = moment().format('MMM DD, YYYY');
 
-getScoresForDayRange(seasonStart, today);
-// getScoresForDay(getYesterday())
-// const msPerDay = 1000 * 60 * 60 * 24;
+// getScoresForDayRange(seasonStart, today);
+getScoresForDay(getYesterday())
+const msPerDay = 1000 * 60 * 60 * 24;
 // const oneMinute = 1000 * 60;
-// setInterval(() => getScoresForDay(getYesterday()), oneMinute);
+setInterval(() => getScoresForDay(getYesterday()), msPerDay);

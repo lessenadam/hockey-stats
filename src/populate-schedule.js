@@ -21,8 +21,8 @@ function saveSchedule() {
   const filePath = 'data/2018-2019-schedule.csv';
   const games = csvToJson.fieldDelimiter(',').getJsonFromCsv(filePath).map((game) => ({
     date: new Date(game.Date),
-    homeTeam: game.Visitor,
-    awayTeam: game.Home,
+    awayTeam: game.Visitor,
+    homeTeam: game.Home,
   }));
 
   // Use connect method to connect to the server
