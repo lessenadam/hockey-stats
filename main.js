@@ -4,7 +4,6 @@ const { saveScores } = require('./src/mongo-save-scores');
 const { getDayInfo, getYesterday } = require('./src/get-date');
 const { serializePromises } = require('./utils/utils');
 
-
 function getDates(startDate, stopDate) {
   const dateArray = [];
   let currentDate = moment(startDate);
@@ -28,7 +27,6 @@ const getScoresAndSave = ({ targetDay, targetFormattedDay } = {}) => {
       console.log('There was some uncaught error', err);
     });
 };
-
 
 const getScoresForDay = (day) => {
   const momentDate = moment(day);
