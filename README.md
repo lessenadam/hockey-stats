@@ -7,7 +7,7 @@ There are essentially 3 services built into this repo.
 
 # Getting started
 
-Make sure to run `npm install` or `yarn install` - either works depending on your preference.
+Make sure to run `$ npm install` or `$ yarn install` - either works depending on your preference.
 
 ### Service 1
 For service number 1, you will need to make sure that you have a running instance of mongodb. For more information, refer to https://docs.mongodb.com/manual/tutorial/manage-mongodb-processes/.
