@@ -1,6 +1,6 @@
 const puppeteer = require('puppeteer');
 
-async function run({ month = 3, day = 6, year = 2018 } = {}, dayFormatted = 'Mon 3 6 2018') {
+async function fetchStats({ month = 3, day = 6, year = 2018 } = {}, dayFormatted = 'Mon 3 6 2018') {
   const url = `https://www.hockey-reference.com/boxscores/index.fcgi?month=${month}&day=${day}&year=${year}`;
   console.log('target url', url);
   const browser = await puppeteer.launch();
@@ -43,7 +43,7 @@ async function run({ month = 3, day = 6, year = 2018 } = {}, dayFormatted = 'Mon
 }
 
 function getStats(day, dayFormatted) {
-  return run(day, dayFormatted)
+  return fetchStats(day, dayFormatted)
     .catch((err) => console.warn('Error:', err));
 }
 

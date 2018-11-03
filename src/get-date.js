@@ -5,6 +5,10 @@ module.exports = {
     return moment().add(-1, 'days');
   },
 
+  get2DaysAgo() {
+    return moment().add(-2, 'days');
+  },
+
   getDayInfo(momentDay) {
     return {
       targetDay: {
