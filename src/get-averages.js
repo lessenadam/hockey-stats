@@ -7,6 +7,9 @@ function getStreak(games) {
   // game will have either .gfa and .gaa or .gfh and .gah
   // if .gfa > .gaa or .gfh > .gah then its a win, other wise it's a loss
   const streakInfo = games.reduce((streak, game) => {
+    if (!streak.streaking) {
+      return streak;
+    }
     let type;
     if ((game.gfh && game.gfh > game.gfa) || (game.gfa && game.gfa > game.gaa)) {
       type = 'W';
@@ -18,10 +21,11 @@ function getStreak(games) {
       return {
         type,
         count: streak.count + 1,
+        streaking: true,
       };
     }
-    return streak;
-  }, { type: null, count: 0 });
+    return Object.assign({}, streak, { streaking: false });
+  }, { type: null, count: 0, streaking: true });
 
   return `${streakInfo.count}${streakInfo.type}`;
 }
