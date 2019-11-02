@@ -34,7 +34,7 @@ function getStreak(games) {
 
 const getLeagueAvgs = () => MongoClient.connect(url).then((db) => {
   // Get the documents collection
-  const collection = db.collection('scores');
+  const collection = db.collection('scores-2019');
 
   //
   // return collection.find
@@ -62,7 +62,7 @@ const getLeagueAvgs = () => MongoClient.connect(url).then((db) => {
 });
 
 const getTeamAvgs = (teamName) => MongoClient.connect(url).then((db) => {
-  const collection = db.collection('scores');
+  const collection = db.collection('scores-2019');
 
   return collection
     .aggregate([
@@ -93,7 +93,7 @@ const getTeamAvgs = (teamName) => MongoClient.connect(url).then((db) => {
 });
 
 const getLastN = (teamName, numberOfGames) => MongoClient.connect(url).then((db) => {
-  const collection = db.collection('scores');
+  const collection = db.collection('scores-2019');
 
   const avgPromise = collection
     .aggregate([

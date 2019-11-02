@@ -45,11 +45,11 @@ const getScoresForDayRange = (dayFrom, dayTo) => {
     });
 }
 
-const seasonStart = 'Oct 3, 2018'
+const seasonStart = 'Oct 2, 2019'
 const today = moment().format('MMM DD, YYYY');
 
-// getScoresForDayRange(seasonStart, today);
-getScoresForDay(get2DaysAgo())
+getScoresForDayRange(seasonStart, today);
+// getScoresForDay(get2DaysAgo())
 const msPerDay = 1000 * 60 * 60 * 24;
 // const oneMinute = 1000 * 60;
-setInterval(() => getScoresForDay(get2DaysAgo()), msPerDay);
+// setInterval(() => getScoresForDay(get2DaysAgo()), msPerDay);

@@ -25,7 +25,7 @@ function splitGameScore({
 
 const insertDocuments = function insertDoc(docs, db) {
   // Get the documents collection
-  const collection = db.collection('scores');
+  const collection = db.collection('scores-2019');
 
   // check for existence
   const targetDate = docs[0].date;

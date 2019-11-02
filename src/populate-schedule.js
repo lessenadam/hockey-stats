@@ -18,7 +18,7 @@ function saveSchedule() {
   // read in the csv
   // convert it to the documents we want to save to the db
   // date, homeTeam, awayTeam (Date, Visitor, Home)
-  const filePath = 'data/2018-2019-schedule.csv';
+  const filePath = 'data/2019_2020_NHL_Schedule.csv';
   const games = csvToJson.fieldDelimiter(',').getJsonFromCsv(filePath).map((game) => ({
     date: new Date(game.Date),
     awayTeam: game.Visitor,
