@@ -1,6 +1,7 @@
 const { MongoClient } = require('mongodb');
 const _ = require('lodash');
 const { url } = require('./db-connection');
+const { SCORES_COLLECTION } = require('../utils/constants');
 
 function splitGameScore({
   homeTeam, homeScore, awayTeam, awayScore,
@@ -25,7 +26,7 @@ function splitGameScore({
 
 const insertDocuments = function insertDoc(docs, db) {
   // Get the documents collection
-  const collection = db.collection('scores-2019');
+  const collection = db.collection(SCORES_COLLECTION);
 
   // check for existence
   const targetDate = docs[0].date;

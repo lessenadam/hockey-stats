@@ -1,5 +1,6 @@
 const { MongoClient } = require('mongodb');
 const { url } = require('./db-connection');
+const { SCORES_COLLECTION } = require('../utils/constants');
 
 function getStreak(games) {
   // array of games, use reduce to get streak
@@ -34,7 +35,7 @@ function getStreak(games) {
 
 const getLeagueAvgs = () => MongoClient.connect(url).then((db) => {
   // Get the documents collection
-  const collection = db.collection('scores-2019');
+  const collection = db.collection(SCORES_COLLECTION);
 
   //
   // return collection.find
@@ -62,7 +63,7 @@ const getLeagueAvgs = () => MongoClient.connect(url).then((db) => {
 });
 
 const getTeamAvgs = (teamName) => MongoClient.connect(url).then((db) => {
-  const collection = db.collection('scores-2019');
+  const collection = db.collection(SCORES_COLLECTION);
 
   return collection
     .aggregate([
@@ -93,7 +94,7 @@ const getTeamAvgs = (teamName) => MongoClient.connect(url).then((db) => {
 });
 
 const getLastN = (teamName, numberOfGames) => MongoClient.connect(url).then((db) => {
-  const collection = db.collection('scores-2019');
+  const collection = db.collection(SCORES_COLLECTION);
 
   const avgPromise = collection
     .aggregate([
