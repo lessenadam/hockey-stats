@@ -18,6 +18,8 @@ Once verifying the above, run `$ node src/populate-schedule.js` and the "schedul
 ### Service 2
 For service number 2, no additional prequisites are required besides those in number 1. You have the option of running `$ node main.js` to get all the scores from the season start to the current date; or you can change the commented lines so the `setInterval` is called and scores are feteched once a day. It is useful to run `$ nohup node main.js &` to run the process in the background.
 
+You can run the following command from the mongo shell for example to verify that everything is working correctly `$ db['scores-2019'].find({team: "San Jose Sharks"})`
+
 ### Service 3
 
 For service number 3, you will need to create a file in `/src` called `get-game-projections.js` that exports a function called `getProjectionsForDay`. This is the "secret sauce" and where the fun lies :wink:
