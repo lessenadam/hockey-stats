@@ -2,10 +2,11 @@ const { MongoClient } = require('mongodb');
 const assert = require('assert');
 const csvToJson = require('convert-csv-to-json');
 const { url } = require('./db-connection');
+const { SCHEDULE_COLLECTION, SCHEDULE_FILE_PATH } = require('../utils/constants');
 
 const insertDocuments = function insertDoc(docs, db, callback) {
   // Get the documents collection
-  const collection = db.collection('schedule');
+  const collection = db.collection(SCHEDULE_COLLECTION);
   // Insert some documents
   collection.insertMany(docs, (err, result) => {
     assert.equal(err, null);
@@ -18,8 +19,7 @@ function saveSchedule() {
   // read in the csv
   // convert it to the documents we want to save to the db
   // date, homeTeam, awayTeam (Date, Visitor, Home)
-  const filePath = 'data/2019_2020_NHL_Schedule.csv';
-  const games = csvToJson.fieldDelimiter(',').getJsonFromCsv(filePath).map((game) => ({
+  const games = csvToJson.fieldDelimiter(',').getJsonFromCsv(SCHEDULE_FILE_PATH).map((game) => ({
     date: new Date(game.Date),
     awayTeam: game.Visitor,
     homeTeam: game.Home,
