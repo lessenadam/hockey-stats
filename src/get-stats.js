@@ -19,10 +19,14 @@ async function fetchStats({ month = 3, day = 6, year = 2018 } = {}, dayFormatted
   if (page.url() === url) {
     data = await page.evaluate(() => {
       const games = Array.from(document.querySelectorAll('.game_summary'));
-      const HOME_TEAM = '.teams tbody tr:nth-of-type(1) td:nth-of-type(1) a';
-      const HOME_SCORE = '.teams tbody tr:nth-of-type(1) td:nth-of-type(2)';
-      const AWAY_TEAM = '.teams tbody tr:nth-of-type(2) td:nth-of-type(1) a';
-      const AWAY_SCORE = '.teams tbody tr:nth-of-type(2) td:nth-of-type(2)';
+      // const HOME_TEAM = '.teams tbody tr:nth-of-type(1) td:nth-of-type(1) a'; HAD IT BACKWARDS
+      // const HOME_SCORE = '.teams tbody tr:nth-of-type(1) td:nth-of-type(2)'; HAD IT BACKWARDS
+      const AWAY_TEAM = '.teams tbody tr:nth-of-type(1) td:nth-of-type(1) a';
+      const AWAY_SCORE = '.teams tbody tr:nth-of-type(1) td:nth-of-type(2)';
+      // const AWAY_TEAM = '.teams tbody tr:nth-of-type(2) td:nth-of-type(1) a'; HAD IT BACKWARDS
+      // const AWAY_SCORE = '.teams tbody tr:nth-of-type(2) td:nth-of-type(2)'; HAD IT BACKWARDS
+      const HOME_TEAM = '.teams tbody tr:nth-of-type(2) td:nth-of-type(1) a';
+      const HOME_SCORE = '.teams tbody tr:nth-of-type(2) td:nth-of-type(2)';
       return games.map((game) => ({
         homeTeam: game.querySelector(HOME_TEAM).innerText.trim(),
         homeScore: game.querySelector(HOME_SCORE).innerText.trim(),
