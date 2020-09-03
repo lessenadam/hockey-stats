@@ -16,7 +16,7 @@
     "lodash": "^4.17.11",
     "moment": "^2.22.2",
     "mongodb": "^2.2.36",
-    "puppeteer": "^1.8.0"
+    "puppeteer": "^1.13.0"
   },
   "devDependencies": {
     "eslint": "^5.5.0",
